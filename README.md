@@ -22,3 +22,4 @@ All project documents are in the [Project Wiki](https://github.com/Phantawat/ku-
 - [Vision Statement](https://github.com/Phantawat/ku-polls/wiki/Vision-and-Scope)
 - [Requirements](https://github.com/Phantawat/ku-polls/wiki/Requirements)
 - [Project Plan](https://github.com/Phantawat/ku-polls/wiki/Project-Plan)
+- [Iteration 1 Plan](https://github.com/Phantawat/ku-polls/wiki/Iteration-1-Plan)
