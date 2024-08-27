@@ -17,9 +17,9 @@ To be added.
 
 ## Project Documents
 
-All project documents are in the [Project Wiki](https://github.com/Phantawat/ku-polls/wiki).
+All project documents are in the [Project Wiki](../../wiki).
 
-- [Vision Statement](https://github.com/Phantawat/ku-polls/wiki/Vision-and-Scope)
-- [Requirements](https://github.com/Phantawat/ku-polls/wiki/Requirements)
-- [Project Plan](https://github.com/Phantawat/ku-polls/wiki/Project-Plan)
-- [Iteration 1 Plan](https://github.com/Phantawat/ku-polls/wiki/Iteration-1-Plan)
+- [Vision Statement](../../wiki/Vision-and-Scope)
+- [Requirements](../../wiki/Requirements)
+- [Project Plan](../../ku-polls/wiki/Project-Plan)
+- [Iteration 1 Plan](../../wiki/Iteration-1-Plan)

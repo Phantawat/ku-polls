@@ -3,5 +3,9 @@ li a {
 }
 body {
     background: white url("image/background.jpg") no-repeat;
+<<<<<<< HEAD
     background-size: cover;
 }
+=======
+}
+>>>>>>> 03ee1def8cb69a29a3de61592f78902b8167691f
