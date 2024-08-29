@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django.contrib import admin
 
 
 class Question(models.Model):
@@ -10,8 +11,14 @@ class Question(models.Model):
     and a method for checking is question published
     """
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField('date published', default=timezone.now)
+    end_date = models.DateTimeField('end date', null=True, blank=True)
 
+    @admin.display(
+        boolean=True,
+        ordering="pub_date",
+        description="Published recently?",
+    )
     def __str__(self):
         """
         Return a question string.
@@ -24,6 +31,21 @@ class Question(models.Model):
         """
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    def is_published(self):
+        """
+        returns True if the current date-time is on
+        or after question’s publication date.
+        """
+        return timezone.now() >= self.pub_date
+
+    def can_vote(self):
+        """
+        returns True if voting is allowed for this question.
+        """
+        if self.end_date:
+            return self.pub_date <= timezone.now() <= self.end_date
+        return self.pub_date <= timezone.now()
 
 
 class Choice(models.Model):
