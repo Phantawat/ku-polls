@@ -31,9 +31,48 @@ class QuestionModelTests(TestCase):
         was_published_recently() returns True for questions whose pub_date
         is within the last day.
         """
-        time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
+        time = timezone.now() - datetime.timedelta(hours=23,
+                                                   minutes=59, seconds=59)
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
+
+    def test_is_published(self):
+        """
+        Test that is_published() returns True for
+        questions whose publication date is in the past,
+        and False for questions whose publication date is in the future.
+        """
+        future_time = timezone.now() + datetime.timedelta(hours=23,
+                                                          minutes=59,
+                                                          seconds=59)
+        recent_question = Question(pub_date=future_time)
+        self.assertIs(recent_question.is_published(), False)
+        recent_time = timezone.now()
+        recent_question = Question(pub_date=recent_time)
+        self.assertIs(recent_question.is_published(), True)
+        past_time = timezone.now() - datetime.timedelta(days=1, seconds=1)
+        recent_question = Question(pub_date=past_time)
+        self.assertIs(recent_question.is_published(), True)
+
+    def test_cannot_vote_after_end_date(self):
+        """Cannot vote if the end_date is in the past."""
+        time = timezone.now() - datetime.timedelta(days=1, seconds=1)
+        recent_question = Question(ยpub_date=timezone.now(), end_date=time)
+        self.assertIs(recent_question.can_vote(), False)
+
+    def test_can_vote_before_end_date(self):
+        """Can vote if the end_date is in the future. """
+        time = timezone.now() + datetime.timedelta(days=1)
+        recent_question = Question(pub_date=timezone.now(), end_date=time)
+        self.assertIs(recent_question.can_vote(), True)
+
+    def test_can_vote_without_end_date(self):
+        """
+        Can vote if there is no end_date set
+        (i.e., voting is allowed anytime after pub_date).
+        """
+        recent_question = Question(pub_date=timezone.now())
+        self.assertIs(recent_question.can_vote(), True)
 
 
 def create_question(question_text, days):
@@ -111,7 +150,8 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the future
         returns a 404 not found.
         """
-        future_question = create_question(question_text='Future question', days=5)
+        future_question = create_question(question_text='Future question',
+                                          days=5)
         url = reverse('polls:detail', args=(future_question.id,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
@@ -121,7 +161,8 @@ class QuestionDetailViewTests(TestCase):
         The detail view of a question with a pub_date in the past
         displays the question's text.
         """
-        past_question = create_question(question_text='Past Question.', days=-5)
+        past_question = create_question(question_text='Past Question.',
+                                        days=-5)
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
