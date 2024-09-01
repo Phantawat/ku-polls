@@ -1,5 +1,5 @@
 ## KU Polls: Online Survey Questions 
-![Django Unit Tests](../../actions/workflows/python-tests.yml/badge.svg)
+![Django Unit Tests](https://github.com/Phantawat/ku-polls/actions/workflows/python-tests.yml/badge.svg)
 
 
 An application to conduct online polls and surveys based
