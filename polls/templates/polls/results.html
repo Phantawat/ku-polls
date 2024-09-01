@@ -1,18 +1,18 @@
 {% block content %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
-<h1 style="color: beige">{{ question.question_text }}</h1>
+<h1>{{ question.question_text }}</h1>
 <body>
   <table>
     <thead>
-      <tr style="color: azure">
+      <tr style="color: chocolate">
         <th style="text-align: left;">Choice</th>
         <th style="text-align: right;">Votes</th>
       </tr>
     </thead>
     <tbody>
       {% for choice in question.choice_set.all %}
-        <tr style="color: azure">
+        <tr style="color: chocolate">
           <td style="padding: 8px 12px;">{{ choice.choice_text }}</td>
           <td style="padding: 8px 12px; text-align: right;">{{ choice.votes }}</td>
         </tr>

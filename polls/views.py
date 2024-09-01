@@ -48,6 +48,11 @@ class ResultsView(generic.DetailView):
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
+    if question.is_published():
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "This poll is closed. You cannot vote.",
+        })
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
