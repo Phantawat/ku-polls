@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h2>Welcome to My Custom Admin</h2>
+<div class="dashboard">
+    <div class="module">
+        <h3>Quick Actions</h3>
+        <ul>
+            <li><a href="{% url 'admin:auth_user_changelist' %}">Manage Users</a></li>
+            <li><a href="{% url 'admin:auth_group_changelist' %}">Manage Groups</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
