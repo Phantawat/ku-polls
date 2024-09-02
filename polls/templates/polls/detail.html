@@ -1,19 +1,38 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-   {% if question.is_open %}
-    <form action="{% url 'polls:vote' question.id %}" method="post">
-        {% csrf_token %}
-        {% for choice in question.choice_set.all %}
-            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
-        {% endfor %}
-        <input type="submit" value="Vote">
-    </form>
-{% else %}
-    <p>This poll is closed. You cannot vote.</p>
-{% endif %}
+{% block site_title %}vote | {% endblock %}
+{% block content %}
 
-<p><a href="{% url 'polls:index' %}">Back to List of Polls</a></p>
+    <h1>{{ question.question_text }}</h1>
+    <div class="form-container">
+        <form action="{% url 'polls:vote' question.id %}" method="post">
+            {% csrf_token %}
+            <fieldset class="poll-form">
+                {% if error_message %}
+                    <p class="error">{{ error_message }}</p>{% endif %}
+                {% for choice in question.choice_set.all %}
+                    <div class="choice"
+                         onclick="document.getElementById('choice{{ forloop.counter }}').click();">
+                        {% if user_last_vote and user_last_vote.choice.id == choice.id %}
+                            <input type="radio" name="choice"
+                                   id="choice{{ forloop.counter }}"
+                                   value="{{ choice.id }}" checked>
+                        {% else %}
+                            <input type="radio" name="choice"
+                                   id="choice{{ forloop.counter }}"
+                                   value="{{ choice.id }}">
+                        {% endif %}
+                        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <input type="submit" value="Vote">
+            <div class="home-button"
+                 onclick="location.href='{% url 'polls:results' question.id %}';">
+                <a href={% url 'polls:results' question.id %}>Result</a></div>
+            <div class="home-button"
+                 onclick="location.href='{% url 'polls:index' %}';"><a
+                    href="{% url 'polls:index' %}">Home</a></div>
+        </form>
+    </div>
 
-<p><a href="{% url 'polls:results' question.id %}">View Results</a></p>
-
+{% endblock %}
