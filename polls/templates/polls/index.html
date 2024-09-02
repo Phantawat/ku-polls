@@ -1,13 +1,17 @@
+ิ<body>
 {% load static %}
-<h1 style="color: beige">Latest Polls</h1>
+<h1>Polls available</h1>
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
-
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+        <li>
+            <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
+            <a href="{% url 'polls:results' question.id %}">Results</a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+</body>
