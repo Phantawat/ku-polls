@@ -1,7 +1,22 @@
+<head>
+<title>KU Polls</title>
+</head>
 ิ<body>
 {% load static %}
 <h1>Polls available</h1>
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+{% if user.is_authenticated %}
+    <h3> Welcome back, {{ user.username }}</h3>
+{% else %}
+    <h3> Please <a href="{% url 'login' %}?next={{request.path}}">Login</a></h3>
+{% endif%}
+
+<form action="{% url 'logout' %}" method="post">
+   {% csrf_token %}
+  <a type="submit" href="{% url 'login' %}?next={{request.path}}">Log Out</a>
+</form>
+
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
