@@ -7,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 
-from .models import Choice, Question
+from .models import Choice, Question, Vote
+
 
 class IndexView(generic.ListView):
     """Displays the latest five published polls on the index page."""
@@ -52,20 +53,28 @@ class ResultsView(generic.DetailView):
 def vote(request, question_id):
     """Handles voting for a specific choice in a poll, ensuring only one vote per user."""
     question = get_object_or_404(Question, pk=question_id)
-    if question.is_published():
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "This poll is closed. You cannot vote.",
-        })
+
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
+        # Return an error message if no choice was selected
         return render(request, 'polls/detail.html', {
             'question': question,
-            'error_message': "You didn't select a choice"
+            'error_message': "You didn't select a choice."
         })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        return HttpResponseRedirect(reverse('polls:results',
-                                            args=(question.id,)))
+
+    this_user = request.user
+
+    # Handle the user's vote (update if exists, create if new)
+    try:
+        vote = Vote.objects.get(user=this_user, choice__question=question)
+        vote.choice = selected_choice  # Update the vote with the new choice
+        vote.save()
+        messages.success(request, f"Your vote was updated to '{selected_choice.choice_text}'")
+    except Vote.DoesNotExist:
+        # Create a new vote if no previous vote exists
+        Vote.objects.create(user=this_user, choice=selected_choice)
+        messages.success(request, f"You voted for '{selected_choice.choice_text}'")
+
+    # Redirect to the results page after successful voting
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
