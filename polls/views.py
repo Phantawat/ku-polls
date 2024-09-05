@@ -1,8 +1,12 @@
+import logging
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
@@ -49,32 +53,55 @@ class ResultsView(generic.DetailView):
     template_name = 'polls/results.html'
 
 
+logger = logging.getLogger('polls')
+
+
 @login_required
 def vote(request, question_id):
     """Handles voting for a specific choice in a poll, ensuring only one vote per user."""
     question = get_object_or_404(Question, pk=question_id)
-
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        # Return an error message if no choice was selected
+        logger.warning(f"User {request.user.username} failed to select a choice for question {question_id}")
         return render(request, 'polls/detail.html', {
             'question': question,
-            'error_message': "You didn't select a choice."
+            'error_message': "You didn't select a choice"
         })
-
     this_user = request.user
-
-    # Handle the user's vote (update if exists, create if new)
     try:
         vote = Vote.objects.get(user=this_user, choice__question=question)
-        vote.choice = selected_choice  # Update the vote with the new choice
+        vote.choice = selected_choice
         vote.save()
-        messages.success(request, f"Your vote was updated to '{selected_choice.choice_text}'")
+        logger.info(f"User {this_user.username} changed their vote to choice {selected_choice.choice_text} for question {question_id}")
     except Vote.DoesNotExist:
-        # Create a new vote if no previous vote exists
-        Vote.objects.create(user=this_user, choice=selected_choice)
-        messages.success(request, f"You voted for '{selected_choice.choice_text}'")
+        vote = Vote.objects.create(user=this_user, choice=selected_choice)
+        vote.save()
+        logger.info(f"User {this_user.username} voted for choice {selected_choice.choice_text} for question {question_id}")
 
-    # Redirect to the results page after successful voting
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+
+
+def login(request):
+    """Handle user login."""
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            ip_addr = request.META.get('REMOTE_ADDR')
+            logger.info(f"User {username} logged in from {ip_addr}")
+            return redirect('polls:index')
+        else:
+            ip_addr = request.META.get('REMOTE_ADDR')
+            logger.warning(f"Failed login attempt for {username} from {ip_addr}")
+    return render(request, 'login.html')
+
+
+def logout(request):
+    """Handle user logout."""
+    ip_addr = request.META.get('REMOTE_ADDR')
+    logger.info(f"User {request.user.username} logged out from {ip_addr}")
+    auth_logout(request)
+    return redirect('polls:index')
