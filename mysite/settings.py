@@ -138,7 +138,7 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'polls.log'),
+            'filename': os.getenv('DJANGO_LOG_FILE', 'default.log'),
             'formatter': 'verbose',
         },
     },
