@@ -1,6 +1,5 @@
 ## KU Polls: Online Survey Questions 
 [![Django Tests](https://github.com/Phantawat/ku-polls/actions/workflows/django.yml/badge.svg)](https://github.com/Phantawat/ku-polls/actions/workflows/django.yml)
-[![Pylint](https://github.com/Phantawat/ku-polls/actions/workflows/pylint.yml/badge.svg)](https://github.com/Phantawat/ku-polls/actions/workflows/pylint.yml)
 
 
 An application to conduct online polls and surveys based
