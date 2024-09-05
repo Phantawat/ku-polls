@@ -12,11 +12,30 @@ https://cpske.github.io/ISP) course at [Kasetsart University](https://www.ku.ac.
 
 ## Installation
 
-To be added. If the procedure is long, put it in the wiki or a separate file.
+Follow these steps to set up and install the necessary dependencies for the project:
+[[Installation.md]]
 
 ## Running the Application
 
-To be added.
+1. Start the Django development server:
+  ```bash
+   python manage.py runserver
+   ```
+2. Open the application in your browser at http://localhost:8000/ or 127.0.0.1:8000.
+3. To stop the server, press `Ctrl+C` in the terminal.
+4. When you're done, deactivate the virtual environment:
+   ```bash
+   deactivate
+   ```
+The KU Polls application is now set up and running! You should see available polls on the index page.
+
+## Running Tests
+To run the application's test suite, use the following command:
+
+```bash
+python manage.py test polls
+```
+
 
 ## Demo User Accounts
 
