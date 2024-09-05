@@ -1,6 +1,6 @@
 ## KU Polls: Online Survey Questions 
-[![Django Tests](https://github.com/Phantawat/ku-polls/actions/workflows/django.yml)
-[![Pylint](https://github.com/Phantawat/ku-polls/actions/workflows/pylint.yml/badge.svg)](https://github.com/fatalaijon/ku-polls/actions/workflows/pylint.yml)
+[![Django Tests](https://github.com/Phantawat/ku-polls/actions/workflows/django.yml/badge.svg)](https://github.com/Phantawat/ku-polls/actions/workflows/django.yml)
+[![Pylint](https://github.com/Phantawat/ku-polls/actions/workflows/pylint.yml/badge.svg)](https://github.com/Phantawat/ku-polls/actions/workflows/pylint.yml)
 
 
 An application to conduct online polls and surveys based
@@ -13,12 +13,12 @@ https://cpske.github.io/ISP) course at [Kasetsart University](https://www.ku.ac.
 ## Installation
 
 Follow these steps to set up and install the necessary dependencies for the project:
-[[Installation.md]]
+[Installation Guide](./Installation.md).
 
 ## Running the Application
 
 1. Start the Django development server:
-  ```bash
+   ```bash
    python manage.py runserver
    ```
 2. Open the application in your browser at http://localhost:8000/ or 127.0.0.1:8000.
