@@ -2,19 +2,27 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 <h1>{{ question.question_text }}</h1>
+{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %} > {{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
 <body>
   <table>
     <thead>
-      <tr style="color: chocolate">
-        <th style="text-align: left;">Choice</th>
-        <th style="text-align: right;">Votes</th>
+      <tr>
+        <th style="text-align: center;">Choice</th>
+        <th style="text-align: center;">Votes</th>
       </tr>
     </thead>
     <tbody>
       {% for choice in question.choice_set.all %}
-        <tr style="color: chocolate">
+        <tr>
           <td style="padding: 8px 12px;">{{ choice.choice_text }}</td>
-          <td style="padding: 8px 12px; text-align: right;">{{ choice.votes }}</td>
+          <td style="padding: 8px 12px;">{{ choice.votes }}</td>
         </tr>
       {% endfor %}
     </tbody>
