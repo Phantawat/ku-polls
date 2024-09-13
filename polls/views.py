@@ -61,30 +61,43 @@ logger = logging.getLogger('polls')
 @login_required
 def vote(request, question_id):
     """Handles voting for a specific choice in a poll,
-     ensuring only one vote per user."""
+     ensuring only one vote per user and allowing updates."""
     question = get_object_or_404(Question, pk=question_id)
+
     try:
+        # Retrieve the selected choice from the POST request
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        logger.warning(f"User {request.user.username} failed to"
-                       f" select a choice for question {question_id}")
+        # Log and render an error if the choice is invalid
+        logger.warning(f"User {request.user.username} failed to select a choice for question {question_id}")
         return render(request, 'polls/detail.html', {
             'question': question,
             'error_message': "You didn't select a choice"
         })
+
     this_user = request.user
+
     try:
+        # Check if the user has already voted for this question
         vote = Vote.objects.get(user=this_user, choice__question=question)
+        # Update the existing vote with the new choice
         vote.choice = selected_choice
         vote.save()
-        logger.info(f"User {this_user.username} changed "
-                    f"their vote to choice {selected_choice.choice_text} for question {question_id}")
+        logger.info(
+            f"User {this_user.username} changed their vote to choice {selected_choice.choice_text}"
+            f" for question {question_id}")
+        messages.success(request, f"Your vote was updated to "
+                                  f"'{selected_choice.choice_text}'")
     except Vote.DoesNotExist:
+        # Create a new vote if the user has not voted yet
         vote = Vote.objects.create(user=this_user, choice=selected_choice)
         vote.save()
-        logger.info(f"User {this_user.username} voted for choice"
-                    f" {selected_choice.choice_text} for question {question_id}")
-
+        logger.info(
+            f"User {this_user.username} voted for choice {selected_choice.choice_text}"
+            f" for question {question_id}")
+    messages.success(request, f"You voted for "
+                              f"'{selected_choice.choice_text}'")
+    # Redirect to the results page after voting
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
