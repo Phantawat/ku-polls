@@ -21,7 +21,8 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """Return the last five published questions that are not in the future."""
+        """Return the last five published questions
+         that are not in the future."""
         return Question.objects.filter(
             pub_date__lte=timezone.now()
         ).order_by('-pub_date')[:5]
@@ -38,7 +39,8 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
     def get(self, request, *args, **kwargs):
-        """Redirects to the index if voting is not allowed, with an error message."""
+        """Redirects to the index if voting is not allowed,
+         with an error message."""
         question = self.get_object()
         if not question.can_vote():
             messages.error(request, "Voting is not allowed for this poll.")
@@ -58,12 +60,14 @@ logger = logging.getLogger('polls')
 
 @login_required
 def vote(request, question_id):
-    """Handles voting for a specific choice in a poll, ensuring only one vote per user."""
+    """Handles voting for a specific choice in a poll,
+     ensuring only one vote per user."""
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        logger.warning(f"User {request.user.username} failed to select a choice for question {question_id}")
+        logger.warning(f"User {request.user.username} failed to"
+                       f" select a choice for question {question_id}")
         return render(request, 'polls/detail.html', {
             'question': question,
             'error_message': "You didn't select a choice"
@@ -73,11 +77,13 @@ def vote(request, question_id):
         vote = Vote.objects.get(user=this_user, choice__question=question)
         vote.choice = selected_choice
         vote.save()
-        logger.info(f"User {this_user.username} changed their vote to choice {selected_choice.choice_text} for question {question_id}")
+        logger.info(f"User {this_user.username} changed "
+                    f"their vote to choice {selected_choice.choice_text} for question {question_id}")
     except Vote.DoesNotExist:
         vote = Vote.objects.create(user=this_user, choice=selected_choice)
         vote.save()
-        logger.info(f"User {this_user.username} voted for choice {selected_choice.choice_text} for question {question_id}")
+        logger.info(f"User {this_user.username} voted for choice"
+                    f" {selected_choice.choice_text} for question {question_id}")
 
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
