@@ -50,7 +50,6 @@ Sample polls and users data are included. There are 4 demo accounts:
 
 All project documents are in the [Project Wiki](../../wiki).
 
-### Project Documentations
 - [Vision Statement](../../wiki/Vision-and-Scope)
 - [Requirements](../../wiki/Requirements)
 - [Project Plan](../../ku-polls/wiki/Project-Plan)
