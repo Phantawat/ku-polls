@@ -71,7 +71,7 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
             except Vote.DoesNotExist:
                 last_vote = None
         return render(request, self.template_name,
-                      {'question': question, 'last_vote': last_vote, 'is_open': question.is_open})
+                      {'question': question, 'last_vote': last_vote})
 
 
 class ResultsView(generic.DetailView):
@@ -90,7 +90,7 @@ def vote(request, question_id):
      ensuring only one vote per user and allowing updates."""
     question = get_object_or_404(Question, pk=question_id)
 
-    if not question.is_open:
+    if not question.can_vote():
         logger.warning(f"User {request.user.username} attempted to vote in a closed poll {question_id}")
         return render(request, 'polls/detail.html', {
             'question': question,

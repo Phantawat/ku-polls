@@ -5,7 +5,6 @@
 {% load static %}
 <h1>Polls available</h1>
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
-
 {% if user.is_authenticated %}
     <h3> Welcome back, {{ user.username }}</h3>
 {% else %}
@@ -29,9 +28,34 @@
         <li>
             <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
             <a href="{% url 'polls:results' question.id %}">Results</a>
-            <span class="status {% if not question.can_vote %}closed{% else %}open{% endif %}">
-                    {{ question.status }}
-                </span>
+            {% if question.can_vote %}
+                <span
+                style="display: inline-block;
+                padding: 5px 10px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: bold;
+                text-transform: uppercase;
+                background-color: #28a745; /* Green for open status */
+                border: 1px solid #218838;
+                margin-left: 10px;">
+                OPEN
+            </span>
+            {% else %}
+                <span
+                style="display: inline-block;
+                padding: 5px 10px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: bold;
+                text-transform: uppercase;
+                background-color: #dc3545; /* Red for closed status */
+                border: 1px solid #c82333;
+                margin-left: 10px;">
+                CLOSED
+            </span>
+            {% endif %}
+
         </li>
     {% endfor %}
     </ul>
