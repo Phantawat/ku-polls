@@ -62,6 +62,8 @@ copy sample.env .env
 ```bash
 cp sample.env .env
 ```
+Edit your `.env` file. following the Guideline.
+type `exit()` to exit the shell mode.
 
 ### 7. Apply Migrations
 
