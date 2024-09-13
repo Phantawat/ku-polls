@@ -13,7 +13,7 @@ This guide provides step-by-step instructions for setting up and running the KU 
 
 Begin by cloning the repository to your local machine:
 ```bash
-git clone https://github.com/Yanatg/ku-polls.git
+git clone https://github.com/Phantawat/ku-polls.git
 ```
 
 ### 2. Navigate to the Project Directory
