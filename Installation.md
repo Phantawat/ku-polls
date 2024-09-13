@@ -73,12 +73,19 @@ python manage.py migrate
 ### 8. Load Initial Data
 
 Install pre-defined data using fixtures:
+#### Data for Question and Choices only (no Votes)
 ```bash
-# No voted version
-python manage.py loaddata data/polls-no-vote.json     
+python manage.py loaddata data/polls-v4.json 
+```
+#### Data for Votes
+```bash
+python manage.py loaddata data/votes-v4.json polls.vote    
+```
+#### Data For User data:
+```bash
 python manage.py loaddata data/users.json
-
-# Implementing version
-python manage.py loaddata data/polls-v3.json     
-python manage.py loaddata data/users.json
+```
+#### Or load all data files in one command:
+```bash
+python manage.py loaddata data/polls-v4.json data/votes-v4.json data/users.json
 ```
