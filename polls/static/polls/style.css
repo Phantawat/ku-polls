@@ -206,3 +206,25 @@ label {
         margin-bottom: 10px;
     }
 }
+
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.status.open {
+    background-color: #28a745; /* Green for open status */
+    border: 1px solid #218838; /* Darker green border */
+}
+
+.status.closed {
+    background-color: #dc3545; /* Red for closed status */
+    border: 1px solid #c82333; /* Darker red border */
+}
+

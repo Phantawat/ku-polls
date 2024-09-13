@@ -1,6 +1,6 @@
 import logging
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
@@ -27,6 +27,13 @@ class IndexView(generic.ListView):
             pub_date__lte=timezone.now()
         ).order_by('-pub_date')
 
+    def get_context_data(self, **kwargs):
+        """Add question status to the context."""
+        context = super().get_context_data(**kwargs)
+        for question in context['latest_question_list']:
+            question.status = 'Open' if question.can_vote() else 'Closed'
+        return context
+
 
 class DetailView(LoginRequiredMixin, generic.DetailView):
     """Shows the details of a specific poll if voting is allowed."""
@@ -39,13 +46,32 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
     def get(self, request, *args, **kwargs):
-        """Redirects to the index if voting is not allowed,
-         with an error message."""
-        question = self.get_object()
+        """
+        Handle GET requests for question details.
+
+        Redirect to index if voting is not allowed.
+        Show last vote if authenticated.
+        """
+        try:
+            question = self.get_object()
+        except Http404:
+            messages.error(request, "This question is not available.")
+            return HttpResponseRedirect(reverse('polls:index'))
+
         if not question.can_vote():
-            messages.error(request, "Voting is not allowed for this poll.")
-            return redirect('polls:index')
-        return super().get(request, *args, **kwargs)
+            messages.error(request, "Voting is not allowed for this question.")
+            return HttpResponseRedirect(reverse('polls:index'))
+
+        this_user = request.user
+        last_vote = None
+        if this_user.is_authenticated:
+            try:
+                last_vote = (Vote.objects.get
+                             (user=this_user, choice__question=question).choice.id)
+            except Vote.DoesNotExist:
+                last_vote = None
+        return render(request, self.template_name,
+                      {'question': question, 'last_vote': last_vote, 'is_open': question.is_open})
 
 
 class ResultsView(generic.DetailView):
@@ -63,6 +89,13 @@ def vote(request, question_id):
     """Handles voting for a specific choice in a poll,
      ensuring only one vote per user and allowing updates."""
     question = get_object_or_404(Question, pk=question_id)
+
+    if not question.is_open:
+        logger.warning(f"User {request.user.username} attempted to vote in a closed poll {question_id}")
+        return render(request, 'polls/detail.html', {
+            'question': question,
+            'error_message': "Voting is not allowed for this poll."
+        })
 
     try:
         # Retrieve the selected choice from the POST request
