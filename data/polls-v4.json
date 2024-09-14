@@ -3,7 +3,7 @@
   "model": "polls.question",
   "pk": 3,
   "fields": {
-    "question_text": "Will Liverpool buy some player before the transfer window close?",
+    "question_text": "Will Liverpool buy some players before the transfer window closes?",
     "pub_date": "2024-08-25T16:00:59Z",
     "end_date": null
   }
@@ -21,7 +21,7 @@
   "model": "polls.question",
   "pk": 5,
   "fields": {
-    "question_text": "Which football grass should we go?",
+    "question_text": "Which football field should we go?",
     "pub_date": "2024-08-31T06:25:48Z",
     "end_date": null
   }
@@ -39,7 +39,7 @@
   "model": "polls.question",
   "pk": 7,
   "fields": {
-    "question_text": "how many ucl that liverpool have won",
+    "question_text": "How many UCL have Liverpool won?",
     "pub_date": "2024-09-02T03:42:39Z",
     "end_date": null
   }
