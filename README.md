@@ -42,9 +42,10 @@ Sample polls and users data are included. There are 4 demo accounts:
 
 | Username | Password |
 |:---------|---------:|
-|  demo1   | hackme11 |
-|  demo2   | hackme22 |
-|  demo3   | hackme33 |
+| demo1    | hackme11 |
+| demo2    | hackme22 |
+| demo3    | hackme33 |
+| demo4    | hackme44 |
 
 
 ## Project Documents
