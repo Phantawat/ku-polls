@@ -46,13 +46,14 @@ Sample polls and users data are included. There are 4 demo accounts:
 |  demo2   | hackme22 |
 |  demo3   | hackme33 |
 
+
 ## Project Documents
 
 All project documents are in the [Project Wiki](../../wiki).
 
 - [Vision Statement](../../wiki/Vision-and-Scope)
 - [Requirements](../../wiki/Requirements)
-- [Project Plan](../../ku-polls/wiki/Project-Plan)
+- [Project Plan](../../wiki/Project-Plan)
 - [Domain models](../../wiki/Domain-model)
 
 ### Project Iterations
