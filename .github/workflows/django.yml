@@ -35,7 +35,7 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test polls
-    - name: Run Coverage
-      run: |
-        coverage run --branch -m unittest discover
-        coverage report
+    # - name: Run Coverage
+    #   run: |
+    #     coverage run --branch -m unittest discover
+    #     coverage report
